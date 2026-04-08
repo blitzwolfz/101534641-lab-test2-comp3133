@@ -1,0 +1,83 @@
+<div class="filter-panel">
+  <div class="panel-header">
+    <h1 class="panel-title">SpaceX Mission Filter</h1>
+    <div class="panel-subtitle">FILTER &amp; SEARCH LAUNCH DATABASE</div>
+  </div>
+
+  <div class="filter-controls">
+    <div class="filter-section">
+      <div class="filter-label">LAUNCH YEAR</div>
+      <div class="year-grid">
+        <button *ngFor="let year of launchYears"
+                class="year-btn"
+                [class.active]="selectedYear === year"
+                (click)="filterByYear(year)">
+          {{ year }}
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label">LAUNCH STATUS</div>
+      <div class="toggle-group">
+        <button class="toggle-btn"
+                [class.active]="selectedLaunchSuccess === 'true'"
+                (click)="filterByLaunchSuccess('true')">SUCCESS</button>
+        <button class="toggle-btn"
+                [class.active]="selectedLaunchSuccess === 'false'"
+                (click)="filterByLaunchSuccess('false')">FAILURE</button>
+      </div>
+    </div>
+
+    <button class="clear-btn" (click)="clearFilters()"
+            *ngIf="selectedYear || selectedLaunchSuccess || selectedLandSuccess">
+      CLEAR ALL FILTERS
+    </button>
+  </div>
+
+  <div class="results-bar">
+    <span class="results-count">{{ filteredMissions.length }} RESULTS</span>
+    <span class="results-filter" *ngIf="selectedYear">YEAR: {{ selectedYear }}</span>
+    <span class="results-filter" *ngIf="selectedLaunchSuccess">
+      LAUNCH: {{ selectedLaunchSuccess === 'true' ? 'SUCCESS' : 'FAILURE' }}
+    </span>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span class="loading-text">LOADING MISSION DATABASE...</span>
+  </div>
+
+  <div class="mission-card-grid" *ngIf="!loading">
+    <mat-card class="mission-card" *ngFor="let mission of filteredMissions"
+              (click)="viewDetails(mission.flight_number)">
+      <div class="card-patch-area">
+        <img *ngIf="mission.links.mission_patch_small"
+             [src]="mission.links.mission_patch_small"
+             [alt]="mission.mission_name"
+             class="patch-img" />
+        <div class="patch-placeholder" *ngIf="!mission.links.mission_patch_small">
+          NO PATCH
+        </div>
+      </div>
+      <div class="card-data">
+        <div class="card-mission-name">{{ mission.mission_name }} #{{ mission.flight_number }}</div>
+        <div class="card-row">
+          <span class="card-label">Mission Ids</span>
+          <span class="card-value">{{ mission.links.mission_patch_small ? 'Available' : '-' }}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Launch Year</span>
+          <span class="card-value">{{ mission.launch_year }}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Successful Launch</span>
+          <span class="card-value" [class.val-success]="mission.launch_success === true"
+                [class.val-fail]="mission.launch_success === false">
+            {{ mission.launch_success === true ? 'Yes' : mission.launch_success === false ? 'No' : 'No Data' }}
+          </span>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
