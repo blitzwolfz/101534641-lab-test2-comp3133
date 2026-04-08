@@ -1,0 +1,70 @@
+<div class="mission-control-panel">
+  <div class="panel-header">
+    <div class="status-bar">
+      <span class="status-dot"></span>
+      <span class="status-text">LIVE FEED</span>
+    </div>
+    <h1 class="panel-title">SpaceX Mission Launch List</h1>
+    <div class="mission-count" *ngIf="!loading">
+      {{ missions.length }} MISSIONS LOGGED
+    </div>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span class="loading-text">RETRIEVING MISSION DATA...</span>
+  </div>
+
+  <div class="mission-grid" *ngIf="!loading">
+    <mat-card class="mission-card" *ngFor="let mission of missions; let i = index"
+              (click)="viewDetails(mission.flight_number)">
+      <div class="card-index">{{ mission.flight_number | number:'3.0-0' }}</div>
+      <div class="card-body">
+        <div class="card-top-row">
+          <img *ngIf="mission.links.mission_patch_small"
+               [src]="mission.links.mission_patch_small"
+               [alt]="mission.mission_name"
+               class="mission-patch" />
+          <div class="mission-patch-placeholder" *ngIf="!mission.links.mission_patch_small">
+            N/A
+          </div>
+          <div class="mission-info">
+            <h2 class="mission-name">{{ mission.mission_name }}</h2>
+            <div class="mission-year">{{ mission.launch_year }}</div>
+            <div class="mission-rocket">
+              <span class="label">ROCKET</span>
+              {{ mission.rocket.rocket_name }} &middot; {{ mission.rocket.rocket_type }}
+            </div>
+          </div>
+          <div class="launch-status">
+            <span class="status-badge" [class.success]="mission.launch_success === true"
+                  [class.fail]="mission.launch_success === false"
+                  [class.unknown]="mission.launch_success === null">
+              {{ mission.launch_success === true ? 'SUCCESS' : mission.launch_success === false ? 'FAILURE' : 'TBD' }}
+            </span>
+          </div>
+        </div>
+        <div class="mission-details" *ngIf="mission.details">
+          {{ mission.details }}
+        </div>
+        <div class="mission-details no-data" *ngIf="!mission.details">
+          No mission details available.
+        </div>
+        <div class="card-links">
+          <a *ngIf="mission.links.article_link" [href]="mission.links.article_link"
+             target="_blank" rel="noopener" class="link-btn" (click)="$event.stopPropagation()">
+            ARTICLE
+          </a>
+          <a *ngIf="mission.links.wikipedia" [href]="mission.links.wikipedia"
+             target="_blank" rel="noopener" class="link-btn" (click)="$event.stopPropagation()">
+            WIKIPEDIA
+          </a>
+          <a *ngIf="mission.links.video_link" [href]="mission.links.video_link"
+             target="_blank" rel="noopener" class="link-btn" (click)="$event.stopPropagation()">
+            VIDEO
+          </a>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
