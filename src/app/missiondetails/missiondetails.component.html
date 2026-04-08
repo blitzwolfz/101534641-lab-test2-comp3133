@@ -1,0 +1,102 @@
+<div class="details-panel">
+  <button class="back-btn" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+    BACK TO MISSIONS
+  </button>
+
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span class="loading-text">LOADING MISSION TELEMETRY...</span>
+  </div>
+
+  <div class="mission-brief" *ngIf="!loading && mission">
+    <div class="brief-header">
+      <h1 class="brief-title">SpaceX Mission Details</h1>
+      <div class="flight-tag">FLIGHT #{{ mission.flight_number }}</div>
+    </div>
+
+    <mat-card class="detail-card">
+      <div class="detail-top">
+        <div class="patch-container">
+          <img *ngIf="mission.links.mission_patch"
+               [src]="mission.links.mission_patch"
+               [alt]="mission.mission_name"
+               class="detail-patch" />
+          <img *ngIf="!mission.links.mission_patch && mission.links.mission_patch_small"
+               [src]="mission.links.mission_patch_small"
+               [alt]="mission.mission_name"
+               class="detail-patch" />
+          <div class="patch-placeholder" *ngIf="!mission.links.mission_patch && !mission.links.mission_patch_small">
+            NO PATCH<br>AVAILABLE
+          </div>
+        </div>
+
+        <div class="detail-info">
+          <h2 class="detail-mission-name">Mission - {{ mission.mission_name }}</h2>
+          <div class="info-row">
+            <span class="info-label">Name</span>
+            <span class="info-value">{{ mission.mission_name }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Launch Year</span>
+            <span class="info-value">{{ mission.launch_year }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Launch Status</span>
+            <span class="info-value" [class.val-success]="mission.launch_success === true"
+                  [class.val-fail]="mission.launch_success === false">
+              {{ mission.launch_success === true ? 'SUCCESS' : mission.launch_success === false ? 'FAILURE' : 'UNKNOWN' }}
+            </span>
+          </div>
+
+          <div class="section-header">Rocket</div>
+          <div class="info-row">
+            <span class="info-label">Name</span>
+            <span class="info-value">{{ mission.rocket.rocket_name }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Type</span>
+            <span class="info-value">{{ mission.rocket.rocket_type }}</span>
+          </div>
+
+          <div class="section-header" *ngIf="mission.launch_site">Launch Site</div>
+          <div class="info-row" *ngIf="mission.launch_site">
+            <span class="info-label">Name</span>
+            <span class="info-value">{{ mission.launch_site.site_name_long }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section" *ngIf="mission.details">
+        <div class="section-header">Launch Details</div>
+        <p class="detail-text">{{ mission.details }}</p>
+      </div>
+
+      <div class="detail-section">
+        <div class="section-header">More Info on Launch Details</div>
+        <div class="detail-links">
+          <a *ngIf="mission.links.article_link" [href]="mission.links.article_link"
+             target="_blank" rel="noopener" class="detail-link-btn">
+            <mat-icon>description</mat-icon>
+            ARTICLE
+          </a>
+          <a *ngIf="mission.links.wikipedia" [href]="mission.links.wikipedia"
+             target="_blank" rel="noopener" class="detail-link-btn">
+            <mat-icon>public</mat-icon>
+            WIKIPEDIA
+          </a>
+          <a *ngIf="mission.links.video_link" [href]="mission.links.video_link"
+             target="_blank" rel="noopener" class="detail-link-btn">
+            <mat-icon>play_circle</mat-icon>
+            VIDEO
+          </a>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="no-data" *ngIf="!loading && !mission">
+    <div class="no-data-text">MISSION DATA NOT FOUND</div>
+    <button class="back-btn" (click)="goBack()">RETURN TO MISSION LIST</button>
+  </div>
+</div>
