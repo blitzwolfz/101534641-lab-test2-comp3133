@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background: #12151a;
+  color: #c0c0c0;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2e34;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d4890a;
+}
+
+::selection {
+  background: #d4890a;
+  color: #0d1117;
+}
+
+a {
+  color: #d4890a;
+}
+
+.mat-mdc-card {
+  --mdc-elevated-card-container-color: #1a1e24;
+}
+
+.mat-mdc-progress-spinner circle {
+  stroke: #d4890a !important;
+}
